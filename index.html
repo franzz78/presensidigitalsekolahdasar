@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presensi Digital - SDN 1 Susukan Agung</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Font Google (Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- HTML5 QR Code Scanner -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- SheetJS & jsPDF -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loader-card">
+      <div class="loader-logo-wrap">
+        <img src="https://tareqwavlgqoexxffuuc.supabase.co/storage/v1/object/sign/Logo_Website/Logo_Website/IMG-20260701-WA0001(2).jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kNWIxNTEyZS03YTE5LTQzY2UtYWUxNC00ZmRkNzMyZmIyODMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvX1dlYnNpdGUvTG9nb19XZWJzaXRlL0lNRy0yMDI2MDcwMS1XQTAwMDEoMikuanBnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjAwOTQ4MSwiZXhwIjozMzMyMjAwOTQ4MX0.Qj4ICtuYicW9XcDxwQPVRYrJ4P2-6S0URlgooYJbvC4" alt="Logo Sekolah">
+      </div>
+      <h2>Welcome to Presensi Digital Sekolah</h2>
+      <p class="creator">Created by Engineering Website</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar"></div>
+      </div>
+      <div class="progress-val"><span id="progress-text">0%</span></div>
+    </div>
+  </div>
+
+  <!-- Header & Navbar Sticky -->
+  <header class="app-header">
+    <nav class="navbar">
+      <div class="nav-brand">
+        <img src="https://tareqwavlgqoexxffuuc.supabase.co/storage/v1/object/sign/Logo_Website/Logo_Website/IMG-20260701-WA0001(2).jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kNWIxNTEyZS03YTE5LTQzY2UtYWUxNC00ZmRkNzMyZmIyODMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvX1dlYnNpdGUvTG9nb19XZWJzaXRlL0lNRy0yMDI2MDcwMS1XQTAwMDEoMikuanBnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjAwOTQ4MSwiZXhwIjozMzMyMjAwOTQ4MX0.Qj4ICtuYicW9XcDxwQPVRYrJ4P2-6S0URlgooYJbvC4" alt="Logo Website" class="nav-logo">
+        <div class="nav-title">
+          <span class="main-title">Presensi Digital Sekolah</span>
+          <span class="sub-title">SDN 1 SUSUKAN AGUNG</span>
+        </div>
+      </div>
+      
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="nav-menu" id="nav-menu">
+        <ul>
+          <li><a href="#" onclick="showSection('home-section')"><i class="fa-solid fa-house"></i> Halaman Utama (Scan QR)</a></li>
+          <li><a href="#" onclick="showSection('kelas4-section')"><i class="fa-solid fa-graduation-cap"></i> Kelas 4</a></li>
+          <li><a href="#" onclick="showSection('kelas5-section')"><i class="fa-solid fa-graduation-cap"></i> Kelas 5</a></li>
+          <li><a href="#" onclick="showSection('kelas6-section')"><i class="fa-solid fa-graduation-cap"></i> Kelas 6</a></li>
+          <li class="nav-admin-item"><a href="#" onclick="accessAdmin()"><i class="fa-solid fa-user-shield"></i> Administrator</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <!-- Home Section (Scan QR & Clock) -->
+    <section id="home-section" class="active-section">
+      <div class="home-hero-card">
+        <div class="school-badge">
+          <img src="https://tareqwavlgqoexxffuuc.supabase.co/storage/v1/object/sign/Logo_Website/Logo_Website/IMG-20260701-WA0001(2).jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kNWIxNTEyZS03YTE5LTQzY2UtYWUxNC00ZmRkNzMyZmIyODMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvX1dlYnNpdGUvTG9nb19XZWJzaXRlL0lNRy0yMDI2MDcwMS1XQTAwMDEoMikuanBnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjAwOTQ4MSwiZXhwIjozMzMyMjAwOTQ4MX0.Qj4ICtuYicW9XcDxwQPVRYrJ4P2-6S0URlgooYJbvC4" alt="Logo Sekolah" class="center-logo">
+        </div>
+
+        <div class="clock-wrapper">
+          <div id="clock" class="clock-display">00:00:00 WIB</div>
+          <div id="date-display" class="date-display">--</div>
+        </div>
+
+        <div class="scanner-status">
+          <span class="pulse-dot"></span>
+          Status Scanner: <span class="badge-active">Active</span>
+        </div>
+
+        <div class="scanner-card">
+          <div class="scanner-header">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>Scan QR Code Presensi Siswa</span>
+          </div>
+          <div id="reader"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kelas 4 Section -->
+    <section id="kelas4-section" class="hidden-section">
+      <div class="content-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-users"></i> Daftar Siswa Kelas 4</h2>
+        </div>
+        <div class="table-container">
+          <table id="table-k4">
+            <thead>
+              <tr><th>No</th><th>Nama Siswa</th><th>Kelas</th><th>QR Code</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kelas 5 Section -->
+    <section id="kelas5-section" class="hidden-section">
+      <div class="content-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-users"></i> Daftar Siswa Kelas 5</h2>
+        </div>
+        <div class="table-container">
+          <table id="table-k5">
+            <thead>
+              <tr><th>No</th><th>Nama Siswa</th><th>Kelas</th><th>QR Code</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kelas 6 Section -->
+    <section id="kelas6-section" class="hidden-section">
+      <div class="content-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-users"></i> Daftar Siswa Kelas 6</h2>
+        </div>
+        <div class="table-container">
+          <table id="table-k6">
+            <thead>
+              <tr><th>No</th><th>Nama Siswa</th><th>Kelas</th><th>QR Code</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Administrator Section -->
+    <section id="admin-section" class="hidden-section">
+      <div class="page-title">
+        <h2><i class="fa-solid fa-sliders"></i> Panel Administrator</h2>
+        <p>Kelola data siswa dan laporan presensi harian secara real-time.</p>
+      </div>
+
+      <!-- Form Card -->
+      <div class="content-card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-user-plus"></i> Kelola Data Siswa</h3>
+        </div>
+        <form id="student-form" class="form-grid">
+          <input type="hidden" id="student-id">
+          <div class="form-group">
+            <label for="student-name">Nama Siswa</label>
+            <input type="text" id="student-name" required placeholder="Masukkan Nama Siswa">
+          </div>
+          <div class="form-group">
+            <label for="student-class">Kelas</label>
+            <select id="student-class" required>
+              <option value="Kelas 4">Kelas 4</option>
+              <option value="Kelas 5">Kelas 5</option>
+              <option value="Kelas 6">Kelas 6</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="btn-save"><i class="fa-solid fa-floppy-disk"></i> Simpan Data</button>
+            <button type="button" class="btn btn-secondary" id="btn-cancel" onclick="resetForm()" style="display:none;"><i class="fa-solid fa-xmark"></i> Batal</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- QR Card Generator Area -->
+      <div class="content-card" id="qr-generator-card" style="display:none;">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-qrcode"></i> Cetak QR Code Siswa</h3>
+        </div>
+        <div id="qr-display-area" class="qr-display">
+          <p id="qr-student-info" class="qr-student-title"></p>
+          <div id="qrcode-box"></div>
+          <button onclick="window.print()" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak QR Code</button>
+        </div>
+      </div>
+
+      <!-- Master Data -->
+      <div class="content-card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-database"></i> Master Data Siswa</h3>
+        </div>
+        <div class="table-container">
+          <table id="table-admin-students">
+            <thead>
+              <tr><th>No</th><th>Nama</th><th>Kelas</th><th>Aksi</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rekap Presensi -->
+      <div class="content-card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-file-invoice"></i> Rekap Absensi Siswa</h3>
+        </div>
+        <div class="filter-controls">
+          <div class="filter-group">
+            <label for="recap-date">Pilih Tanggal:</label>
+            <input type="date" id="recap-date">
+            <button onclick="filterRecap()" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Filter</button>
+          </div>
+          <div class="export-btns">
+            <button onclick="exportToExcel()" class="btn btn-excel"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+            <button onclick="exportToPDF()" class="btn btn-pdf"><i class="fa-solid fa-file-pdf"></i> Export PDF</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="table-recap">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Status</th>
+                <th>Waktu Scan</th>
+                <th>Aksi Guru</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p class="copyright">@2026 PRESENSI DIGITAL - SDN 1 SUSUKAN AGUNG</p>
+      <p class="managed-by">DIKELOLA OLEH: OPERATOR SEKOLAH</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
