@@ -1,0 +1,21 @@
+{
+  "short_name": "PresensiSDN1",
+  "name": "Presensi Digital - SDN 1 Susukan Agung",
+  "icons": [
+    {
+      "src": "https://tareqwavlgqoexxffuuc.supabase.co/storage/v1/object/sign/Logo_Website/Logo_Website/IMG-20260701-WA0001(2).jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kNWIxNTEyZS03YTE5LTQzY2UtYWUxNC00ZmRkNzMyZmIyODMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvX1dlYnNpdGUvTG9nb19XZWJzaXRlL0lNRy0yMDI2MDcwMS1XQTAwMDEoMikuanBnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjAwOTQ4MSwiZXhwIjozMzMyMjAwOTQ4MX0.Qj4ICtuYicW9XcDxwQPVRYrJ4P2-6S0URlgooYJbvC4",
+      "type": "image/jpeg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://tareqwavlgqoexxffuuc.supabase.co/storage/v1/object/sign/Logo_Website/Logo_Website/IMG-20260701-WA0001(2).jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kNWIxNTEyZS03YTE5LTQzY2UtYWUxNC00ZmRkNzMyZmIyODMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvX1dlYnNpdGUvTG9nb19XZWJzaXRlL0lNRy0yMDI2MDcwMS1XQTAwMDEoMikuanBnIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4NjAwOTQ4MSwiZXhwIjozMzMyMjAwOTQ4MX0.Qj4ICtuYicW9XcDxwQPVRYrJ4P2-6S0URlgooYJbvC4",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#b71c1c",
+  "theme_color": "#b71c1c",
+  "display": "standalone"
+}
+
